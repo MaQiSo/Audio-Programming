@@ -1,0 +1,38 @@
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2019
+
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MQSDrone - Standalone Plugin", "MQSDrone_StandalonePlugin.vcxproj", "{F6276AD3-2274-AB1E-9528-4827A1A25A45}"
+	ProjectSection(ProjectDependencies) = postProject
+		{86B893F5-3406-CAAA-B1AA-9A71CEE0B961} = {86B893F5-3406-CAAA-B1AA-9A71CEE0B961}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MQSDrone - VST3", "MQSDrone_VST3.vcxproj", "{19586142-3713-322B-C772-145868257ED0}"
+	ProjectSection(ProjectDependencies) = postProject
+		{86B893F5-3406-CAAA-B1AA-9A71CEE0B961} = {86B893F5-3406-CAAA-B1AA-9A71CEE0B961}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MQSDrone - Shared Code", "MQSDrone_SharedCode.vcxproj", "{86B893F5-3406-CAAA-B1AA-9A71CEE0B961}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{19586142-3713-322B-C772-145868257ED0}.Debug|x64.ActiveCfg = Debug|x64
+		{19586142-3713-322B-C772-145868257ED0}.Debug|x64.Build.0 = Debug|x64
+		{19586142-3713-322B-C772-145868257ED0}.Release|x64.ActiveCfg = Release|x64
+		{19586142-3713-322B-C772-145868257ED0}.Release|x64.Build.0 = Release|x64
+		{F6276AD3-2274-AB1E-9528-4827A1A25A45}.Debug|x64.ActiveCfg = Debug|x64
+		{F6276AD3-2274-AB1E-9528-4827A1A25A45}.Debug|x64.Build.0 = Debug|x64
+		{F6276AD3-2274-AB1E-9528-4827A1A25A45}.Release|x64.ActiveCfg = Release|x64
+		{F6276AD3-2274-AB1E-9528-4827A1A25A45}.Release|x64.Build.0 = Release|x64
+		{86B893F5-3406-CAAA-B1AA-9A71CEE0B961}.Debug|x64.ActiveCfg = Debug|x64
+		{86B893F5-3406-CAAA-B1AA-9A71CEE0B961}.Debug|x64.Build.0 = Debug|x64
+		{86B893F5-3406-CAAA-B1AA-9A71CEE0B961}.Release|x64.ActiveCfg = Release|x64
+		{86B893F5-3406-CAAA-B1AA-9A71CEE0B961}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
