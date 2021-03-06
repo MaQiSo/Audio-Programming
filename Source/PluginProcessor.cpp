@@ -104,6 +104,8 @@ void MQSDroneAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlo
     /*sinOsc.setSampleRate(sampleRate);
     sinOsc.setFrequency(440.0f);*/
 
+    updateRandomInterval();
+
     for (int synthIndex = 0; synthIndex < synthNum; synthIndex++)
     {
         mqsSynths[synthIndex].setSampleRate(sampleRate);
@@ -112,8 +114,6 @@ void MQSDroneAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlo
     {
         mqsInFalls[fallIndex].setSampleRate(sampleRate);
     }
-
-    updateRandomInterval();
 }
 
 void MQSDroneAudioProcessor::releaseResources()
@@ -190,7 +190,7 @@ void MQSDroneAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juc
 
         end = std::chrono::steady_clock::now();
         int duration = std::chrono::duration_cast<std::chrono::seconds>(end - begin).count();
-        if (checkThrough == synthNum && duration > 6)
+        if (checkThrough == synthNum && duration > 8)
         {
             updateRandomInterval();
             DBG("changed");
@@ -213,6 +213,19 @@ void MQSDroneAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juc
         leftChannel[i] = left;
         rightChannel[i] = right;
     }
+}
+
+void MQSDroneAudioProcessor::updateRandomInterval()
+{
+    int intrvlNum = (int)MQSSynth::IntrvlName::INTRVL_NR_ITEMS;
+    interval = static_cast<MQSSynth::IntrvlName>(abs(random.nextInt()) % intrvlNum);
+    float seed = (float)random.nextInt();
+    for (int synthIndex = 0; synthIndex < synthNum; synthIndex++)
+    {
+        mqsSynths[synthIndex].setIntrvlbyType(interval);
+        mqsSynths[synthIndex].setSeedNote(seed);
+    }
+    begin = std::chrono::steady_clock::now();
 }
 
 //==============================================================================

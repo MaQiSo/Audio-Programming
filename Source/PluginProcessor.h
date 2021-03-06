@@ -72,17 +72,8 @@ private:
     std::chrono::steady_clock::time_point end;
     Random random;
 
-    // function to generate random interval and implement it
-    void updateRandomInterval()
-    {
-        int intrvlNum = (int)MQSSynth::IntrvlName::INTRVL_NR_ITEMS;
-        interval = static_cast<MQSSynth::IntrvlName>(abs(random.nextInt()) % intrvlNum);
-        for (int synthIndex = 0; synthIndex < synthNum; synthIndex++)
-        {
-            mqsSynths[synthIndex].setIntrvlbyType(interval);
-        }
-        begin = std::chrono::steady_clock::now();
-    }
+    // function to generate random global interval and implement it
+    void updateRandomInterval();
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MQSDroneAudioProcessor)
 };

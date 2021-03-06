@@ -10,6 +10,30 @@
 
 #include "MQSSynth.h"
 
+float MQSSynth::getSemiByIntrvl(IntrvlName name)
+{
+    switch (name)
+    {
+    case minor2:
+        return 1.0f;
+    case major2:
+        return 2.0f;
+    case minor3:
+        return 3.0f;
+    case major3:
+        return 4.0f;
+    case perfect4:
+        return 5.0f;
+    case perfect5:
+        return 7.0f;
+    case minor6:
+        return 8.0f;
+    case major6:
+        return 9.0f;
+    }
+    return 5.0f; // handel unexpected
+}
+
 void MQSSynth::setSampleRate(float _sampleRate)
 {
     sampleRate = _sampleRate;
@@ -28,6 +52,12 @@ void MQSSynth::setNote(float note)
 
     osc1.setFrequency(freq1);
     osc2.setFrequency(freq2);
+}
+
+void MQSSynth::setSeedNote(float seed)
+{
+    // ensure seed note is between the range of the base octave
+    seedNote = fmod(abs(seed), 12);
 }
 
 void MQSSynth::setModLFO(float freq)
@@ -52,34 +82,7 @@ void MQSSynth::setIntrvlbyType(int _intrvl)
 
 void MQSSynth::setIntrvlbyType(IntrvlName _intrvl)
 {
-    switch (_intrvl)
-    {
-    case minor2:
-        interval = 1;
-        break;
-    case major2:
-        interval = 2;
-        break;
-    case minor3:
-        interval = 3;
-        break;
-    case major3:
-        interval = 4;
-        break;
-    case perfect4:
-        interval = 5;
-        break;
-    case perfect5:
-        interval = 7;
-        break;
-    case minor6:
-        interval = 8;
-        break;
-    case major6:
-        interval = 9;
-        break;
-    }
-    setNote(note);
+    nextIntrvl = getSemiByIntrvl(_intrvl);
 }
 
 void MQSSynth::genParam()
@@ -99,28 +102,36 @@ void MQSSynth::genParam()
     initPan(volModSample);
 
     // generate random note parameters
-    note = round(random.nextFloat() * 36.0f) + 36.0f; // random note
-    noteVar = ((random.nextBool()) ? 1.0f : -1.0f) / volModSample;
+    interval = nextIntrvl; // update new interval value
+    note = round(seedNote + interval * round(random.nextFloat() * 36.0f / interval) + 24.0f); // random note
+    // note = round(random.nextFloat() * 36.0f) + 36.0f; 
+    noteVar = (random.nextBool() ? 1.0f : -1.0f) / volModSample;
+    note += ((noteVar > 0) ? -0.5f : 0.5f);
     setNote(note); // set note
 
     repeatT = random.nextInt() % 5 + 2;  // random repeat term
+
+    // reset repeat time
+    currentRepT = 0;
 }
 
 bool MQSSynth::isThrough()
 {
-    return (volume < 1e-2f);
+    // return true if the VolumeLfo(envelope) is during its thourgh time
+    return (volume < 2e-2f);
 }
 
 float MQSSynth::process()
 {
     // generate next osc output
     float oscOut = 0.5f * (osc1.process() + osc2.process());
-    oscOut *= modLfo.process();
+    float modLfoValue = modLfo.process();
+    oscOut *= modLfoValue;
     volume = volumeLfo.process();
     oscOut *= 2.0f * volume;
 
     // implement gliss
-    note += noteVar;
+    //note += noteVar;
     setNote(note);
 
     // check if volumeLfo just completed one cycle
@@ -137,8 +148,6 @@ float MQSSynth::process()
         {
             // get new sound
             genParam();
-            // reset repeat time
-            currentRepT = 0;
         }
     }
     return oscOut;

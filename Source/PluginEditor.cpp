@@ -38,7 +38,7 @@ void MQSDroneAudioProcessorEditor::paint (juce::Graphics& g)
     g.drawFittedText (displayText, getLocalBounds(), juce::Justification::centred, 1);
 
     g.setFont(signature);
-    g.drawFittedText("MQS MIDI CHORDS ANALYZER", getLocalBounds(), Justification::bottomRight, 1);
+    g.drawFittedText("MQS INTERVAL WORLDS", getLocalBounds(), Justification::bottomRight, 1);
 }
 
 void MQSDroneAudioProcessorEditor::resized()
